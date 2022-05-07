@@ -1,12 +1,39 @@
-#include "./include/token.h"
-
-Token *createNewToken(char *instruction, char firstChar, InstructionType type)
+typedef enum
 {
-    Token *newToken = calloc(1, sizeof(Token));
+    INT,      // 0
+    DOUBLE,   // 1
+    OPERATOR, // 2
+    ARRAY,    // 3
+    STRING,   // 4
+    BLOCK     // 5
+} TYPE;
 
-    newToken->instruction = instruction;
-    newToken->firstChar = firstChar;
-    newToken->type = type;
+typedef struct SToken
+{
+    char *instruction;
+    TYPE type;
+} Token;
 
-    return newToken;
+typedef struct STokenSequence
+{
+    Token *tokenSequence;
+} TokenSequence;
+
+Token *createNewToken(TYPE type, char *instruction)
+{
+    Token *t = (Token *)calloc(1, sizeof(Token));
+
+    t->instruction = instruction;
+    t->type = type;
+
+    return t;
+}
+
+TokenSequence *createNewTokenSequence()
+{
+    TokenSequence *ts = (TokenSequence *)calloc(1, sizeof(TokenSequence));
+
+    ts->tokenSequence = (Token *)calloc(1, sizeof(Token));
+
+    return ts;
 }
