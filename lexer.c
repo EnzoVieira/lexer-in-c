@@ -41,13 +41,26 @@ int hasDigit(char instruction[])
     return 0;
 }
 
-void getInstructionToken(char *instruction)
+int hasPunct(char instruction[])
+{
+    while (strlen(instruction))
+    {
+        // Retorna imediatamente se encontrar um punct
+        if (ispunct(instruction[0]))
+            return 1;
+
+        instruction++;
+    }
+
+    return 0;
+}
+
+Token *getInstructionToken(char *instruction)
 {
     Token *newToken = createNewToken(0, instruction);
 
     if (instruction[0] == '[')
     {
-        printf("ARRAY %s\n", instruction);
         newToken->type = ARRAY;
     }
     else if (instruction[0] == '{')
@@ -71,17 +84,25 @@ void getInstructionToken(char *instruction)
             newToken->type = DOUBLE;
         }
     }
+    else if (hasPunct(instruction))
+    {
+        newToken->type = OPERATOR;
+    }
     else
     {
         newToken->type = STRING;
     }
 
-    printf("TOKEN (%d, %s)\n", newToken->type, newToken->instruction);
+    return newToken;
+    // printf("TOKEN (%d, %s)\n", newToken->type, newToken->instruction);
 }
 
 // Separa os elemtos do input
-void getNextInstuctionToken(Lexer *l)
+Token *getNextInstuctionToken(Lexer *l)
 {
+
+    skipWhitespaces(l);
+
     char *instruction = calloc(1, sizeof(char));
     instruction[0] = '\0';
 
@@ -183,5 +204,5 @@ void getNextInstuctionToken(Lexer *l)
         }
     }
 
-    getInstructionToken(instruction);
+    return getInstructionToken(instruction);
 }

@@ -22,8 +22,13 @@ int main()
     // Ler input
     while (strlen(lexer->contents) - 1)
     {
-        getNextInstuctionToken(lexer);
+        // Gera um novo token para cada elemento no input
+        Token *token = getNextInstuctionToken(lexer);
+        printToken(token);
 
+        parserParse(token, lexer);
+
+        // Ignora todos os whitespaces entre os elementos do input
         skipWhitespaces(lexer);
     }
 
